@@ -23,7 +23,7 @@ export default function Blog({ posts, initialDisplayPosts, pagination }) {
       <ListLayout
         posts={posts}
         initialDisplayPosts={initialDisplayPosts}
-        pagination={pagination}
+        // pagination={pagination}
         title="All Posts"
       />
     </>

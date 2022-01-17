@@ -48,7 +48,7 @@ export default function PostPage({ posts, initialDisplayPosts, pagination }) {
       <ListLayout
         posts={posts}
         initialDisplayPosts={initialDisplayPosts}
-        pagination={pagination}
+        // pagination={pagination}
         title="All Posts"
       />
     </>
