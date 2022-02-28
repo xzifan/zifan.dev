@@ -9,10 +9,10 @@ const siteMetadata = {
   siteRepo: 'https://github.com/xzifan/zifan.dev',
   // siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.jpg',
-  socialBanner: '/static/images/twitter-card.png',
+  socialBanner: '/static/images/avatar.jpg',
   email: 'xiao@zifan.dev',
   github: 'https://github.com/xzifan',
-  linkedin: 'https://www.linkedin.com',
+  linkedin: 'https://www.linkedin.com/in/zifan-xiao-60126/',
   locale: 'en-US',
   analytics: {
     // supports plausible, simpleAnalytics, umami or googleAnalytics

@@ -9,7 +9,7 @@ layout: PostLayout
 # API 设计
 
 写在开头： 本译文源自芬兰奥卢大学 Ivan Sanchez 的课程 Programmable web project，由三位在奥卢大学交换生分享译制，如有措辞不当或任何不妥，请前辈们多多在评论中指点。原课程[programmable-web-project](https://lovelace.oulu.fi/ohjelmoitava-web/programmable-web-project-spring-2019)。课程中的练习原本有上传自动检验，但需要学校账号选课登陆，在此直接分享答案。  
-任何转载、再翻译等共享方式需遵循 [CC-BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.zh) 协议，详见底部许可。
+任何转载、再翻译等共享方式需遵循 [CC-BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.zh) 协议。
 
 在本章练习中你将学会如何设计自己的超媒体接口，同时学会如何利用[Apiary](https://apiary.io/a%20professional%20documentation%20framework)来创建专业的接口文档。
 
@@ -199,11 +199,11 @@ artist collection
 将上面所有的因素考虑进去，我们最终可以得到一个路径：
 
 ```
-/api/artists/{artist_unique_name}/albums/{album_title}/{disc}/{track}/
+/api/artists/{'{artist_unique_name}'}/albums/{album_title}/{disc}/{track}/
 ```
 
 上面这个路径可以唯一地定义每一个播放记录，并且将数据层次清晰地表达了出来，所有在层次结构中的资源（包括集合和个体），都可以通过从上面这个路径的结尾逐渐删除一个或多个部分来获得。
-对于 VA 专辑的播放记录，我们可以通过将上面路径中的{artist_unique_name}换成 VA 来区分，路径如下：
+对于 VA 专辑的播放记录，我们可以通过将上面路径中的{'{artist_unique_name}'}换成 VA 来区分，路径如下：
 
 ```
 /api/artists/VA/albums/{album_title}/{disc}/{track}/
@@ -220,16 +220,16 @@ artist collection
 ```
 api
 ├── artists
-│   ├── {artist}
+│   ├── {'{artist}'}
 │   │   └── albums
-│   │       └── {album}
-│   │           └── {disc}
-│   │               └── {track}
+│   │       └── {'{album}'}
+│   │           └── {'{disc}'}
+│   │               └── {'{track}'}
 │   └── VA
 │       └── albums
-│           └── {album}
-│               └── {disc}
-│                   └── {track}
+│           └── {'{album}'}
+│               └── {'{disc}'}
+│                   └── {'{track}'}
 └── albums
 ```
 
@@ -249,17 +249,17 @@ api
 
 我们将每个资源对应的 HTTP 方法在下表列出：
 
-| **Resource**      | **URI**                                              | **GET** | **POST** | **PUT** | **DELETE** |
-| ----------------- | ---------------------------------------------------- | ------- | -------- | ------- | ---------- |
-| artist collection | /api/artists/                                        | X       | X        | -       | -          |
-| artist item       | /api/artists/{artist}/                               | X       | -        | X       | X          |
-| albums by artist  | /api/artists/{artist}/albums/                        | X       | X        | -       | -          |
-| albums by VA      | /api/artists/VA/albums/                              | X       | X        | -       | -          |
-| all albums        | /api/albums/                                         | X       | -        | -       | -          |
-| album             | /api/artists/{artist}/albums/{album}/                | X       | X        | X       | X          |
-| VA album          | /api/artists/VA/albums/{album}/                      | X       | X        | X       | X          |
-| track             | /api/artists/{artist}/albums/{album}/{disc}/{track}/ | X       | -        | X       | X          |
-| VA track          | /api/artists/VA/albums/{album}/{disc}/{track}/       | X       | -        | X       | X          |
+| **Resource**      | **URI**                                                              | **GET** | **POST** | **PUT** | **DELETE** |
+| ----------------- | -------------------------------------------------------------------- | ------- | -------- | ------- | ---------- |
+| artist collection | /api/artists/                                                        | X       | X        | -       | -          |
+| artist item       | /api/artists/{'{artist}'}/                                           | X       | -        | X       | X          |
+| albums by artist  | /api/artists/{'{artist}'}/albums/                                    | X       | X        | -       | -          |
+| albums by VA      | /api/artists/VA/albums/                                              | X       | X        | -       | -          |
+| all albums        | /api/albums/                                                         | X       | -        | -       | -          |
+| album             | /api/artists/{'{artist}'}/albums/{'{album}'}/                        | X       | X        | X       | X          |
+| VA album          | /api/artists/VA/albums/{'{album}'}/                                  | X       | X        | X       | X          |
+| track             | /api/artists/{'{artist}'}/albums/{'{album}'}/{'{disc}'}/{'{track}'}/ | X       | -        | X       | X          |
+| VA track          | /api/artists/VA/albums/{'{album}'}/{'{disc}'}/{'{track}'}/           | X       | -        | X       | X          |
 
 可以看到我们遵守了 REST 原则，每个 HTTP 方法都按在预期执行。上面这张表告诉了我们很多有用的信息：它显示了可以发出的所有可能的 HTTP 请求，甚至提示了它们的含义。
 例如，如果你向 track 资源提交一个 PUT 申请，它将修改 track 的数据（更具体地，它会用请求中的数据代替原数据）.
@@ -273,7 +273,7 @@ api
 >
 > 解释：我们第一步需要确定的是这个操作需要用哪一种 HTTP 方法，由于我们想要给某一张专辑加播放记录，那我们需要用到的方法是 POST，所以根据上面资源表中的信息，能用 POST 方法的资源只有五个（一般只有‘集合’资源才能使用 POST 方法）：artist collection, albums by artist, albums by VA, album 和 VA album.
 > 如果我们想给一张只有一个艺术家的专辑加播放记录，很明显我们需要操作的资源是 album`/api/artists/{artist}/albums/{album}/`.
-> 那么我们可能会好奇播放记录的信息{track：Happiness； disc：3}该如何加进去呢？
+> 那么我们可能会好奇播放记录的信息{"track：Happiness； disc：3"}该如何加进去呢？
 >
 > 注意，我们不能将播放记录的信息放在 URI 中，而是应该将播放记录的信息放进 POST 方法的请求中（request body）：在这里把所有信息都写在 URI 中提交给 track 资源是不正确的（`/api/artists/paatos/albums/Kallocain/3/Happiness/`），因为 track 作为一个‘个体’资源，并不支持 POST 方法，我们只能给一个‘集合’中添加新元素，而不能给一个‘个体’添加新记录。而`/api/artists/paatos/albums/Kallocain/3/Happiness/`这个 URI 支持的操作是 GET,PUT,DELETE，即当我们想要获取，修改或删除某一个确切的 track 数据时可以调用该 URI。
 
@@ -653,16 +653,3 @@ This is a collection of all the albums
 > 对于 DELETE，你只需要使用正确的状态代码进行回复，唯一的错误码是 404。
 >
 > > [答案\_t4]()
-
-<br />
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
-  <img
-    alt="知识共享许可协议"
-    style="border-width:0"
-    src="https://user-gold-cdn.xitu.io/2019/7/26/16c2c079c78ffeda?w=88&h=31&f=png&s=1697"
-  />
-</a>
-<br />
-本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
-  知识共享署名-相同方式共享 4.0 国际许可协议
-</a>进行许可。

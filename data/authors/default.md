@@ -4,7 +4,6 @@ avatar: /static/images/avatar.jpg
 occupation: Frontend engineer
 company: Alibaba Cloud
 email: xiao@zifan.dev
-twitter: https://twitter.com/Twitter
-linkedin: https://www.linkedin.com
+linkedin: https://www.linkedin.com/in/zifan-xiao-60126/
 github: https://github.com/xzifan
 ---

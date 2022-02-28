@@ -368,7 +368,7 @@ class SensorhubBuilder(MasonBuilder):
 
 # 动态模式，静态方法
 
-{/_ <!-- In exercise 2 we sung the praises of adding JSON schemas to our hypermedia controls. Schemas do have a nasty drawback: they are awfully verbose. If a control with like three attributes was already deemed something we'd rather not repeat in our code unnecessarily, a schema that's easily over ten lines of code is definitely something that must be written in only one place. It's also worth recalling that we have two uses for them: serialize them as parts of controls, and also to use them for validating request bodies sent by the client. --> _/}
+In exercise 2 we sung the praises of adding JSON schemas to our hypermedia controls. Schemas do have a nasty drawback: they are awfully verbose. If a control with like three attributes was already deemed something we'd rather not repeat in our code unnecessarily, a schema that's easily over ten lines of code is definitely something that must be written in only one place. It's also worth recalling that we have two uses for them: serialize them as parts of controls, and also to use them for validating request bodies sent by the client.
 
 “模式”在 POST 和 PUT control，以及使用查询参数的方法中通常会用到。同一个模式在代码中会被反复利用，因此不会将其硬编码到某一个 add_control 方法中。实际上，也不应该将其放到任何常规的方法中，因为我们有时会在没有 SensorhubBuilder 实例的时候会用到这些模式。所以，模式应当由静态方法 return，或内置在 class 属性中。只有在某些需要参数化的情况下才倾向于选择静态方法。那么这里将加入一个构造 sensor 模式并返回的静态方法：
 
@@ -411,7 +411,7 @@ def add_control_add_sensor():
 >
 > **学习目标：** 学习如何通过字典子类的简便方法来添加 control 并维护 Mason 超媒体文档。  
 > **开始之前：** 下载之前的 MasonBuilder 类以作为该任务开始，然后自己写一个类作为 MasonBuilder 的子类。
-> 建议完成从前面的任务代码的基础上继续这个任务。 {/_ <!-- - these pieces must be in place for api.url_for to work. We also recommend that you change the model name of StorageItem to StorageEntry to avoid mixups later. Remember also that the MasonBuilder code should be included in the file you send. --> _/}
+> 建议完成从前面的任务代码的基础上继续这个任务。 these pieces must be in place for api.url_for to work. We also recommend that you change the model name of StorageItem to StorageEntry to avoid mixups later. Remember also that the MasonBuilder code should be included in the file you send.
 >
 > **库存生成器类：InventoryBuilder**  
 > 在这个任务中，你需要创建一个类，该类可用于添加与库存管理器的与产品资源对应的超媒体 control。这个类需要有以下方法
