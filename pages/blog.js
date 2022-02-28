@@ -3,7 +3,7 @@ import siteMetadata from '@/data/siteMetadata'
 import ListLayout from '@/layouts/ListLayout'
 import { PageSEO } from '@/components/SEO'
 
-export const POSTS_PER_PAGE = 5
+export const POSTS_PER_PAGE = 8
 
 export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
@@ -23,7 +23,7 @@ export default function Blog({ posts, initialDisplayPosts, pagination }) {
       <ListLayout
         posts={posts}
         initialDisplayPosts={initialDisplayPosts}
-        // pagination={pagination}
+        pagination={pagination}
         title="All Posts"
       />
     </>
